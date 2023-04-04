@@ -1,0 +1,15 @@
+version: '3.1'
+
+services:
+
+  database:
+    image: postgres
+    container_name: go_app
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=go_app
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=secret
+    volumes:
+      - ./database:/var/lib/postgresql
