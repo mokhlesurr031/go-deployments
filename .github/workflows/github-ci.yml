@@ -17,6 +17,7 @@ jobs:
         run: | 
           echo "This is test github ci" 
           echo "Current branch is $GITHUB_REF"
+          echo "Event name is $GITHUB_EVENT_NAME"
 
       - name: Checkoout to latest code 
         uses: actions/checkout@v2
