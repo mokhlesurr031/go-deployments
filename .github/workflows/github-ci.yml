@@ -3,10 +3,10 @@ name: test-ci
 on:
   push:
     branches: 
-    - develop
-    - Main
+      - develop
   pull_request:
-    branches: ["main"]
+    branches: 
+      - main
   
 jobs:
   build:
@@ -19,11 +19,9 @@ jobs:
           echo "This is test github ci" 
           echo "Current branch is ${{github.ref}}"
           echo "Event name is ${{github.event_name}}"
-          echo "Event name is ${{github.head_ref}}"
 
       - name: Checkoout to latest code 
         uses: actions/checkout@v2
-
 
       - name: Build the golang application 
         run: go build -o main .
@@ -37,11 +35,6 @@ jobs:
       - name: Echo A Simple String
         run: | 
           echo "This is test github ci" 
-          echo "Current branch is ${{github.ref}}"
-          echo "Event name is ${{github.event_name}}"
-          echo "Event name is ${{github.head_ref}}"
-          echo "DONE"
-
 
       - name: Echo Hello
         run: echo "Hello from the main branch"
