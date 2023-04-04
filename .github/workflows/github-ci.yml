@@ -33,7 +33,7 @@ jobs:
   develop:
     name: Develop branch
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+    if: github.ref == 'refs/heads/develop' && github.event_name == 'pull_request'
     steps:
       - name: Echo Hello
         run: echo "Hello from the develop branch"
