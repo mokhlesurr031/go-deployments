@@ -14,7 +14,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Echo A Simple String
-        run: echo "This is test github ci" 
+        run: | 
+          echo "This is test github ci" 
+          echo "Current branch is $GITHUB_REF"
 
       - name: Checkoout to latest code 
         uses: actions/checkout@v2
