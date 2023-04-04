@@ -12,3 +12,11 @@ jobs:
       - name: Echo A Simple String
         run: echo "This is test github ci" 
 
+      - name: Checkoout to latest code 
+        uses: actions/checkout@v2
+
+
+      - name: Build the golang application 
+        run: go build -o main .
+        
+
