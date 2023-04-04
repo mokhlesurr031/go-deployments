@@ -32,8 +32,16 @@ jobs:
   merge:
     name: Merge to Main 
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'pull_request'
+    # if: github.ref == 'refs/heads/main' 
     steps:
+      - name: Echo A Simple String
+        run: | 
+          echo "This is test github ci" 
+          echo "Current branch is ${{github.ref}}"
+          echo "Event name is ${{github.event_name}}"
+          echo "Event name is ${{github.head_ref}}"
+
+
       - name: Echo Hello
         run: echo "Hello from the main branch"
   
