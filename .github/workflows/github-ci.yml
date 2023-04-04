@@ -25,9 +25,17 @@ jobs:
   merge:
     name: Merge to Main 
     runs-on: ubuntu-latest
-    # if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     steps:
-      - name: Echo Hello 
-        run: echo "Hello from the main branch"
+      - name: Echo World
+        run: echo "World from the main branch"
+  
+  develop:
+    name: Develop branch
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+    steps:
+      - name: Echo Hello
+        run: echo "Hello from the develop branch"
 
 
