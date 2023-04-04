@@ -2,7 +2,9 @@ name: test-ci
 
 on:
   push:
-    branches: ["develop"]
+    branches: 
+    - develop
+    - Main
   pull_request:
     branches: ["main"]
   
@@ -25,9 +27,17 @@ jobs:
   merge:
     name: Merge to Main 
     runs-on: ubuntu-latest
-    # if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/Main' && github.event_name == 'pull_request'
     steps:
-      - name: Echo Hello 
-        run: echo "Hello from the main branch"
+      - name: Echo World
+        run: echo "World from the main branch"
+  
+  develop:
+    name: Develop branch
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+    steps:
+      - name: Echo Hello
+        run: echo "Hello from the develop branch"
 
 
