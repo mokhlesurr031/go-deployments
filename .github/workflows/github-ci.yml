@@ -18,5 +18,14 @@ jobs:
 
       - name: Build the golang application 
         run: go build -o main .
-        
+
+
+  merge:
+    name: Merge to Main 
+    runs-on: ubuntu-latest
+    if: github.ref = "refs/heads/main" && github.event_name == "push"
+    steps:
+      - name: Echo Hello 
+        run: echo "Hello from the main branch"
+
 
