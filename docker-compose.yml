@@ -4,12 +4,29 @@ services:
 
   database:
     image: postgres
-    container_name: go_app
+    container_name: go_db
     ports:
       - 5432:5432
     environment:
-      - POSTGRES_DB=go_app
+      - POSTGRES_DB=go_app_db
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=secret
     volumes:
       - ./database:/var/lib/postgresql
+
+    networks:
+      - go-app-network
+
+
+# crates new network
+
+# networks:
+#   go-app-network:
+#     driver: bridge
+
+
+# connects in an existing network 
+
+networks:
+  go-app-network:
+    external: true
