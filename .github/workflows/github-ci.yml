@@ -43,7 +43,7 @@ jobs:
   deploy:
     name: Deploy to production 
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && gtihub.ref == 'refs/head/main'
+    if: github.event_name == 'push' && github.ref == 'refs/head/main'
     steps:
       - name: Echo confirming we are on main branch 
         run: echo "swiched to main branch"
