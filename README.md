@@ -1,4 +1,8 @@
-
+## Run app
+1. docker network create go-app-network 
+2. docker-compose up -d 
+3. docker build -t go-app . 
+4. docker run -p8081:8081 --network go-app-network --name go-app go-app
 
 
 ### Users
