@@ -1,5 +1,7 @@
 ## Run app
-`docker-compose up -d`
+1. docker network create go-app-network 
+2. docker-compose up -d 
+
 
 
 ### Users
