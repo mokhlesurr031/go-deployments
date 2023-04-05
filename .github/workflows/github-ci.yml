@@ -15,12 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
     steps:
-      - name: Echo A Simple String
-        run: | 
-          echo "This is test github ci" 
-          echo "Current branch is ${{github.ref}}"
-          echo "Event name is ${{github.event_name}}"
-
       - name: Checkoout to latest code 
         uses: actions/checkout@v2
 
@@ -43,9 +37,20 @@ jobs:
   deploy:
     name: Deploy to production 
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/head/main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
       - name: Echo confirming we are on main branch 
         run: echo "swiched to main branch"
+
+  common: 
+    name: Git Information
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo A Simple String
+        run: | 
+          echo "This is test github ci" 
+          echo "Current branch is ${{github.ref}}"
+          echo "Event name is ${{github.event_name}}"
+
 
 
