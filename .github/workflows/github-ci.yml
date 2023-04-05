@@ -4,6 +4,7 @@ on:
   push:
     branches: 
       - develop
+      - main 
   pull_request:
     branches: 
       - main
@@ -39,5 +40,12 @@ jobs:
       - name: Echo Hello
         run: echo "Hello from the main branch"
   
+  deploy:
+    name: Deploy to production 
+    runs-on: ubuntu-latest
+    if: github.event_name == "push" && gtihub.ref == "refs/head/main"
+    steps:
+      - name: Echo confirming we are on main branch 
+        run: echo "swiched to main branch"
 
 
