@@ -18,6 +18,18 @@ services:
       - go-app-network
 
 
+  app:
+    image: go-app
+    container_name: go-app
+    restart: always
+    build: .
+    ports:
+      - 8081:8081
+
+    networks:
+      - go-app-network
+
+
 # crates new network
 
 # networks:
