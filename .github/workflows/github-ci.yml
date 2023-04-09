@@ -42,6 +42,23 @@ jobs:
       - name: Echo confirming we are on main branch 
         run: echo "swiched to main branch"
 
+      - name: Push built file to docker repository
+        run: echo "Pushing image to dockerhub repository"
+
+      - name: Checkoout to code 
+        uses: actions/checkout@v3
+
+
+      - name: Building and Pushing docker image 
+        run: |
+          go build -o main .
+          docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_ACCESS_KEY }}
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/go-app:$}/go-app:$GITHUB_SHA .
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/go-app::$GITHUB_SHA
+
+
+
+
   common: 
     name: Git Information
     runs-on: ubuntu-latest

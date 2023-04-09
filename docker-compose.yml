@@ -32,13 +32,13 @@ services:
 
 # crates new network
 
-# networks:
-#   go-app-network:
-#     driver: bridge
+networks:
+  go-app-network:
+    driver: bridge
 
 
 # connects in an existing network 
 
-networks:
-  go-app-network:
-    external: true
+# networks:
+#   go-app-network:
+#     external: true
