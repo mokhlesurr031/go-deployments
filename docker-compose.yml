@@ -12,8 +12,7 @@ services:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=secret
     volumes:
-      - ./database:/var/lib/postgresql
-
+      - ${PWD}/database/data/:/var/lib/postgresql/data/
     networks:
       - go-app-network
 
@@ -22,12 +21,16 @@ services:
     image: go-app
     container_name: go-app
     restart: always
-    build: .
+    build:
+      dockerfile: Dockerfile.dev
+      context: .
     ports:
       - 8081:8081
-
+    depends_on:
+      - database
     networks:
       - go-app-network
+
 
 
 # crates new network
