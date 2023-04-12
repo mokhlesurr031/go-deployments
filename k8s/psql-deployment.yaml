@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: go-app-img
-          image: mokhlesur96/go-app:1.0
+          image: mokhlesur96/go-app:0b082bf9017c1a9ccc9d57d2a58b162dc72c69fc
           env:
             - name: PG_HOST
               value: database
@@ -31,14 +31,13 @@ spec:
           ports:
             - containerPort: 8081
           readinessProbe:
-            httpGet:
-              path: /health
-              port: 8081
+            exec:
+              command: [ "psql", "-h", "database", "-U", "admin", "-c", "SELECT 1;" ]
             initialDelaySeconds: 5
             periodSeconds: 10
 
         # PostgreSQL container
-        - name: postgresql
+        - name: database
           image: postgres
           env:
             - name: POSTGRES_USER
