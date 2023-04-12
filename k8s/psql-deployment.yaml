@@ -1,59 +1,42 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: go-app-deployment-name
-  labels:
-    app: go-app-deployment-app
+  name: psql-depl
+  namespace:
+
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: go-app
+      app: psql
   template:
     metadata:
       labels:
-        app: go-app
+        app: psql
+
     spec:
       containers:
-        - name: go-app-img
-          image: mokhlesur96/go-app:0b082bf9017c1a9ccc9d57d2a58b162dc72c69fc
+        - name: psql
+          image: postgres:latest
           env:
-            - name: PG_HOST
-              value: database
-            - name: PG_PORT
-              value: "5432"
-            - name: PG_USER
-              value: admin
-            - name: PG_PASSWORD
-              value: secret
-            - name: PG_DB
+            - name: POSTGRES_DB
               value: go_app_db
-          ports:
-            - containerPort: 8081
-          readinessProbe:
-            exec:
-              command: [ "psql", "-h", "database", "-U", "admin", "-c", "SELECT 1;" ]
-            initialDelaySeconds: 5
-            periodSeconds: 10
-
-        # PostgreSQL container
-        - name: database
-          image: postgres
-          env:
             - name: POSTGRES_USER
               value: admin
             - name: POSTGRES_PASSWORD
               value: secret
-            - name: POSTGRES_DB
-              value: go_app_db
+
           ports:
             - containerPort: 5432
           volumeMounts:
-            - name: postgresql-data
+            - name: psql-data
               mountPath: /var/lib/postgresql/data
+
+
       volumes:
-        - name: postgresql-data
-          emptyDir: {}
-      restartPolicy: Always
+        - name: psql-data
+          hostPath:
+            path: /database/data/
+
 
 
