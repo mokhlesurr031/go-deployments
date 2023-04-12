@@ -1,12 +1,24 @@
-apiVersion: v1
-kind: Service
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: client-go-port
+  name: go-server-depl
+
 spec:
-  type: NodePort
+  replicas: 1
   selector:
-    component: web
-  ports:
-  - port: 8080   #for other objects of the same cluster
-    targetPort: 8081 #incoming trafic send data to this port 
-    nodePort: 30081 #self brower access range 30000-32767
+    matchLabels:
+      app: go-server
+  template:
+    metadata:
+      labels:
+        app: go-server
+
+    spec:
+      containers:
+        - name: go-image
+          image: mokhlesur96/go-app:9d3c88f757cb58efb1327a4d04d0d4bd6cff33cc
+          ports:
+            - containerPort: 8081
+
+
+
