@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: client-go-port
+spec:
+  type: NodePort
+  selector:
+    component: web
+  ports:
+  - port: 8080   #for other objects of the same cluster
+    targetPort: 8081 #incoming trafic send data to this port 
+    nodePort: 30081 #self brower access range 30000-32767

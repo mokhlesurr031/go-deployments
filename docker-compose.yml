@@ -12,33 +12,42 @@ services:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=secret
     volumes:
-      - ./database:/var/lib/postgresql
-
+      - ${PWD}/database/data/:/var/lib/postgresql/data/
     networks:
       - go-app-network
 
 
-  app:
-    image: go-app
-    container_name: go-app
-    restart: always
-    build: .
-    ports:
-      - 8081:8081
-
-    networks:
-      - go-app-network
+#  app:
+#    image: mokhlesur96/go-app
+#    container_name: go-app
+#    restart: always
+#    build:
+#      dockerfile: Dockerfile.dev
+#      context: .
+#    ports:
+#      - 8081:8081
+#    depends_on:
+#      - database
+#    networks:
+#      - go-app-network
+#    environment:
+#      - POSTGRESQL_ADDON_HOST=go_db
+#      - POSTGRESQL_ADDON_PORT=5432
+#      - POSTGRESQL_ADDON_USER=admin
+#      - POSTGRESQL_ADDON_PASSWORD=secret
+#      - POSTGRESQL_ADDON_DB=go_app_db
+#
+#    entrypoint: [ "/app/wait-for.sh", "go_db:5432", "--", "/app/main" ]
+#    command: [ "serve" ]
 
 
 # crates new network
-
 networks:
   go-app-network:
     driver: bridge
 
 
-# connects in an existing network 
-
+# connects in an existing network
 # networks:
 #   go-app-network:
 #     external: true
