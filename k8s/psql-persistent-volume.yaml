@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: psql-pv
+
+spec:
+#  capacity specifies the storage capacity of the PV. In this case, it's set to 1 gigabyte (1Gi).
+  capacity:
+    storage: 1Gi
+
+
+#  accessModes defines how the PV can be accessed by Pods. In this case, it's set to ReadWriteOnce, meaning the volume can be mounted as read-write by a single node in the cluster at a time.
+  accessModes:
+    - ReadWriteOnce
+
+#  persistentVolumeReclaimPolicy specifies the policy to be applied when the PV is released. In this case, it's set to Retain, meaning the PV will remain available even after its associated PVC (Persistent Volume Claim) is deleted.
+  persistentVolumeReclaimPolicy: Retain
+
+#  storageClassName defines the name of the storage class that the PV belongs to. Storage classes are used to classify different types of storage that can be used in the cluster. In this case, the storage class is set to "standard".
+  storageClassName: standard
+
+#  hostPath specifies the path on the host machine where the data will be stored. In this case, it's set to "/data/psql", meaning that the data will be stored on the local disk of the node where the Pod using this volume is scheduled.
+  hostPath:
+    path: /data/psql

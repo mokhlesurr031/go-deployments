@@ -8,10 +8,10 @@ spec:
     app: go-server
 
   ports:
-    - name: go-server
-      port: 8081
+    - name: http
+      port: 8000
       targetPort: 8081
-      protocol: TCP
+#      protocol: TCP
 
   type: NodePort
 

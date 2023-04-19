@@ -10,5 +10,3 @@ spec:
     - name: psql
       port: 5432
       targetPort: 5432
-      protocol: TCP
-  type: NodePort

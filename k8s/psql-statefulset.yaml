@@ -1,10 +1,11 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: psql-depl
-
+  name: psql-statefulset
 spec:
+  serviceName: postgres
   replicas: 1
+
   selector:
     matchLabels:
       app: psql
@@ -29,25 +30,44 @@ spec:
                 secretKeyRef:
                   key: DB_USER
                   name: psql-secret
-                  optional: false
 
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
                   key: DB_PASSWORD
                   name: psql-secret
-                  optional: false
 
           ports:
             - containerPort: 5432
+              name: psql
+
           volumeMounts:
             - name: psql-data
               mountPath: /var/lib/postgresql/data
+            - name: psql-config
+              mountPath: /etc/postgresql
+              readOnly: true
 
       volumes:
         - name: psql-data
-          hostPath:
-            path: /database/data/
+          persistentVolumeClaim:
+            claimName: psql-pvc
+
+        - name: psql-config
+          configMap:
+            name: psql-config
+
+  volumeClaimTemplates:
+    - metadata:
+        name: psql-pvc
+        annotations:
+          volume.beta.kubernetes.io/storage-class: standard
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi
+
 
 
 
