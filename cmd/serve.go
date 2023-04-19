@@ -11,11 +11,23 @@ import (
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
 	"github.com/mokhlesur-rahman/golang-basic-crud-api-server/internal/conn"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/spf13/cobra"
 
 	_authHttp "github.com/mokhlesur-rahman/golang-basic-crud-api-server/user/delivery/http"
 	_authRepository "github.com/mokhlesur-rahman/golang-basic-crud-api-server/user/repository"
 	_authUseCase "github.com/mokhlesur-rahman/golang-basic-crud-api-server/user/usecase"
+)
+
+var (
+	httpRequestsTotal = prometheus.NewCounterVec(
+		prometheus.CounterOpts{
+			Name: "http_requests_total",
+			Help: "Total number of HTTP requests.",
+		},
+		[]string{"code", "method"},
+	)
 )
 
 // serveCmd represents the serve command
@@ -49,10 +61,25 @@ func server(cmd *cobra.Command, args []string) {
 	}(srv)
 	<-stop
 }
+func prometheusMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		timer := prometheus.NewTimer(prometheus.ObserverFunc(func(v float64) {
+			httpRequestsTotal.WithLabelValues(fmt.Sprintf("%d", http.StatusOK), r.Method).Inc()
+		}))
+		defer timer.ObserveDuration()
+
+		next.ServeHTTP(w, r)
+	})
+}
 
 func buildHTTP(_ *cobra.Command, _ []string) *http.Server {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
+	// register Prometheus metrics
+	prometheus.MustRegister(httpRequestsTotal)
+
+	// add Prometheus middleware to router
+	r.Use(prometheusMiddleware)
 	r.Use(cors.Handler(cors.Options{
 		AllowedOrigins:   []string{"https://*", "http://*"},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
@@ -70,6 +97,9 @@ func buildHTTP(_ *cobra.Command, _ []string) *http.Server {
 		}
 
 	})
+
+	// add Prometheus endpoint to router
+	r.Handle("/metrics", promhttp.Handler())
 
 	db := conn.DefaultDB()
 	_ = db

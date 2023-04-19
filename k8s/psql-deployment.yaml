@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: psql-depl
-  namespace:
 
 spec:
   replicas: 1
@@ -20,18 +19,30 @@ spec:
           image: postgres:latest
           env:
             - name: POSTGRES_DB
-              value: go_app_db
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_NAME
+                  name: psql-config
+
             - name: POSTGRES_USER
-              value: admin
+              valueFrom:
+                secretKeyRef:
+                  key: DB_USER
+                  name: psql-secret
+                  optional: false
+
             - name: POSTGRES_PASSWORD
-              value: secret
+              valueFrom:
+                secretKeyRef:
+                  key: DB_PASSWORD
+                  name: psql-secret
+                  optional: false
 
           ports:
             - containerPort: 5432
           volumeMounts:
             - name: psql-data
               mountPath: /var/lib/postgresql/data
-
 
       volumes:
         - name: psql-data
