@@ -5,5 +5,12 @@ docker_database:
   POSTGRESQL_ADDON_USER: admin
   POSTGRESQL_ADDON_PASSWORD: secret
 
+local_database:
+  POSTGRESQL_ADDON_HOST: localhost
+  POSTGRESQL_ADDON_PORT: 5432
+  POSTGRESQL_ADDON_DB: go_app_db
+  POSTGRESQL_ADDON_USER: admin
+  POSTGRESQL_ADDON_PASSWORD: secret
+
 current_db:
-  RUNNING: docker_database
+  RUNNING: local_database
