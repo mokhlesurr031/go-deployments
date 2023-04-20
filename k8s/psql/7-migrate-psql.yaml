@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: go-server-migration
+#  namespace: psql-ns
+spec:
+  template:
+    spec:
+      containers:
+        - name: postgresql
+          image: postgres:latest
+          envFrom:
+            - secretRef:
+                name: psql-secret
+            - configMapRef:
+                name: psql-config
+          command:
+            - /bin/bash
+            - -c
+            - |
+              migration_sql="CREATE TABLE IF NOT EXISTS users (
+                id SERIAL PRIMARY KEY,
+                name VARCHAR(255) NOT NULL,
+                email VARCHAR(255) NOT NULL,
+                password VARCHAR(255) NOT NULL,
+                password_confirm VARCHAR(255) NOT NULL,
+                created_at TIMESTAMP NOT NULL
+              );"
+              PGPASSWORD=$POSTGRES_PASSWORD psql -U $POSTGRES_USER -h $POSTGRES_HOST -p $POSTGRES_PORT -d $POSTGRES_DB -c "$migration_sql"
+          # restartPolicy: Never
