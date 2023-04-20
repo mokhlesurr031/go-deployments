@@ -5,6 +5,8 @@ metadata:
 #  namespace: psql-ns
   labels:
     app: psql-statefulset
+
+
 spec:
   serviceName: psql-db-svc
   replicas: 1
@@ -19,6 +21,11 @@ spec:
         app: psql
 
     spec:
+      volumes:
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: psql-pvc
+
       containers:
         - name: postgresql
           image: postgres:latest
@@ -34,12 +41,10 @@ spec:
               name: postgresql
 
           volumeMounts:
-            - name: data
+            - name: postgres-storage
               mountPath: /var/lib/postgresql/data
+              subPath: postgres
 
-      volumes:
-        - name: data
-          persistentVolumeClaim:
-            claimName: psql-pvc
+
 
 

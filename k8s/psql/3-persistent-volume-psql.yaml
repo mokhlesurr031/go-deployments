@@ -2,6 +2,8 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: psql-pv
+  labels:
+    app: psql
 #  namespace: psql-ns
 
 spec:
@@ -10,16 +12,7 @@ spec:
   volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain
-  storageClassName: local-storage
-  local:
-    path: /Users/mokhlesurrahman/dev/github.com/golang-basic-crud-api-server/data/psql
+  hostPath:
+    path: /Users/mokhlesurrahman/dev/db_pv
 
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-        - matchExpressions:
-            - key: kubernetes.io/hostname
-              operator: In
-              values:
-                - minikube
+

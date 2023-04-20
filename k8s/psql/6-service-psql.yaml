@@ -5,10 +5,13 @@ metadata:
 #  namespace: psql-ns
 
 spec:
-  ports:
-    - name: psql
-      port: 5432
-
-  clusterIP: None
   selector:
     app: psql
+
+  type: ClusterIP
+
+  ports:
+    - port: 5432
+      targetPort: 5432
+
+

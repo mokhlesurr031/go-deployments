@@ -5,11 +5,14 @@ metadata:
 #  namespace: psql-ns
 
 spec:
-  volumeName: psql-pv
-  storageClassName: local-storage
-  volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
       storage: 1Gi
+
+  selector:
+    matchLabels:
+      app: psql
+
+
