@@ -3,16 +3,17 @@ kind: PersistentVolume
 metadata:
   name: psql-pv
   labels:
-    app: psql
+    type: psql
 #  namespace: psql-ns
 
 spec:
+  storageClassName: standard
   capacity:
     storage: 1Gi
-  volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: /Users/mokhlesurrahman/dev/db_pv
+    path: /usr/k8s
+    type: DirectoryOrCreate
 
 

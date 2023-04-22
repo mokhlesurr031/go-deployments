@@ -5,14 +5,12 @@ metadata:
 #  namespace: psql-ns
 
 spec:
+  storageClassName: standard
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
       storage: 1Gi
 
-  selector:
-    matchLabels:
-      app: psql
 
 
