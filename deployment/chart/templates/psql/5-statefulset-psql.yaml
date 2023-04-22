@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: psql-statefulset
+#  namespace: psql-ns
+  labels:
+    app: psql-statefulset
+
+
+spec:
+  serviceName: psql-db-svc
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: psql
+
+  template:
+    metadata:
+      labels:
+        app: psql
+
+    spec:
+      volumes:
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: psql-pvc
+
+      containers:
+        - name: postgresql
+          image: postgres:latest
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - secretRef:
+                name: psql-secret
+            - configMapRef:
+                name: psql-config
+
+          ports:
+            - containerPort: 5432
+              name: postgresql
+
+          volumeMounts:
+            - name: postgres-storage
+              mountPath: /var/lib/postgresql/data
+              subPath: postgres
+
+
+
+
