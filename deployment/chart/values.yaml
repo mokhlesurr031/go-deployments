@@ -1,29 +1,29 @@
 postgresql:
   replicaCount: 1
-  ns: 
+  ns:
     kind: Namespace
-    metadata.name: psql-ns 
-    
+    metadata.name: psql-ns
+
   cm:
-    kind: ConfigMap 
+    kind: ConfigMap
     metadata.name: psql-config
     data.POSTGRES_DB: go_app_db
 
   secrets:
-    kind: Secret 
+    kind: Secret
     metadata.name: psql-secret
     type: Opaque
     data.POSTGRES_USER: YWRtaW4=
     data.POSTGRES_PASSWORD: c2VjcmV0
 
   pv:
-    kind: PersistentVolume 
-    metadata.name: psql-pv 
-    metadata.labels.type: psql 
+    kind: PersistentVolume
+    metadata.name: psql-pv
+    metadata.labels.type: psql
     spec.storageClassName: standard
     hostPath.path: /usr/k8s
     hostPath.type: DirectoryOrCreate
-    
+
   pvc:
     kind: PersistentVolumeClaim
     metadata.name: psql-pvc
@@ -31,24 +31,24 @@ postgresql:
 
 
   sts:
-    kind: StatefulSet 
+    kind: StatefulSet
     metadata.name: psql-statefulset
     metadata.labels.app: psql-statefulset
     spec.serviceName: psql-db-svc
-    spec.matchLabels.app: psql 
-    spec.template.metadata.labels.app: psql 
+    spec.matchLabels.app: psql
+    spec.template.metadata.labels.app: psql
 
     spec.spec.containers.image: postgres
-    spec.spec.containers.tag: latest 
+    spec.spec.containers.tag: latest
     spec.spec.containers.imagePullPolicy: IfNotPresent
     spec.spec.containers.volumeMount.mountPath: /var/lib/postgresql/data
-    
+
     volume_storage: psql-storage
 
   svc:
-    kind: Service 
+    kind: Service
     metadata.name: psql-svc
-    spec.selector.app: psql 
+    spec.selector.app: psql
     spec.type: ClusterIP
     spec.ports.port: 5432
     spec.ports.targetPort: 5432
@@ -58,12 +58,12 @@ postgresql:
 go-server:
   replicaCount: 1
 
-  ns: 
-    kind: Namespace 
+  ns:
+    kind: Namespace
     metadata.name: client-ns
 
   depl:
-    kind: Deployment 
+    kind: Deployment
     metadata.name: go-server-depl
     spec.matchLabels.app: go-server
     spec.template.metadata.labels.app: go-server
@@ -73,18 +73,18 @@ go-server:
 
   svc:
     kind: Service
-    metadata.name: go-svc 
+    metadata.name: go-svc
     spec.selector.app: go-server
-    spec.ports.port: 8081 
-    spec.ports.targetPort: 8081 
+    spec.ports.port: 8081
+    spec.ports.targetPort: 8081
     spec.ports.protocol: TCP
     spec.type: NodePort
 
   ing:
-    kind: Ingress 
+    kind: Ingress
     metadata.name: go-ingress
-    spec.rules.port: 8081 
-  
+    spec.rules.port: 8081
+
 
 imagePullSecrets: []
 nameOverride: ""
@@ -102,30 +102,30 @@ serviceAccount:
 podAnnotations: {}
 
 podSecurityContext: {}
-  # fsGroup: 2000
+# fsGroup: 2000
 
 securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
+# capabilities:
+#   drop:
+#   - ALL
+# readOnlyRootFilesystem: true
+# runAsNonRoot: true
+# runAsUser: 1000
 
 
 
 
 resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+# We usually recommend not to specify default resources and to leave this as a conscious
+# choice for the user. This also increases chances charts run on environments with little
+# resources, such as Minikube. If you do want to specify resources, uncomment the following
+# lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+# limits:
+#   cpu: 100m
+#   memory: 128Mi
+# requests:
+#   cpu: 100m
+#   memory: 128Mi
 
 autoscaling:
   enabled: false
